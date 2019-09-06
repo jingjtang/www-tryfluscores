@@ -341,7 +341,7 @@
 
     FS_Data.targets_2016 = FS_Data.targets_seasonal_2016.concat(FS_Data.targets_local_2016);
 
-    FS_Data.targets_2017 = FS_Data.targets_seasonal_2017.concat(FS_Data.targets_local_2016);
+    FS_Data.targets_2017 = FS_Data.targets_seasonal_2017.concat(FS_Data.targets_local_2017);
 
     FS_Data.errors = ['LS', 'AE'];
 
