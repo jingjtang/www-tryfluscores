@@ -29,6 +29,24 @@
             }
             return results1;
           })();
+        } else if (season === 2016 || season === 20160) {
+          this.epiweeks = (function() {
+            var j, results1;
+            results1 = [];
+            for (i = j = 2; j <= 30; i = ++j) {
+              results1.push('' + (i <= 12 ? 201640 + i : 201700 + i - 12));
+            }
+            return results1;
+          })();
+        } else if (season === 2017 || season === 20170) {
+          this.epiweeks = (function() {
+            var j, results1;
+            results1 = [];
+            for (i = j = 2; j <= 30; i = ++j) {
+              results1.push('' + (i <= 12 ? 201740 + i : 201800 + i - 12));
+            }
+            return results1;
+          })();
         } else {
           throw new Error('unsupported season: ' + season);
         }
@@ -111,6 +129,46 @@
             return results1;
           }).call(this);
         }
+        if (season === 20160) {
+          targets = (function() {
+            var j, len, results1;
+            results1 = [];
+            for (j = 0, len = targets.length; j < len; j++) {
+              t = targets[j];
+              results1.push(this.targets_2016[this.targets.indexOf(t)]);
+            }
+            return results1;
+          }).call(this);
+          regions = (function() {
+            var j, len, results1;
+            results1 = [];
+            for (j = 0, len = regions.length; j < len; j++) {
+              r = regions[j];
+              results1.push(this.regions_2016[this.regions.indexOf(r)]);
+            }
+            return results1;
+          }).call(this);
+        }
+        if (season === 20170) {
+          targets = (function() {
+            var j, len, results1;
+            results1 = [];
+            for (j = 0, len = targets.length; j < len; j++) {
+              t = targets[j];
+              results1.push(this.targets_2017[this.targets.indexOf(t)]);
+            }
+            return results1;
+          }).call(this);
+          regions = (function() {
+            var j, len, results1;
+            results1 = [];
+            for (j = 0, len = regions.length; j < len; j++) {
+              r = regions[j];
+              results1.push(this.regions_2017[this.regions.indexOf(r)]);
+            }
+            return results1;
+          }).call(this);
+        }
         nr = regions.length;
         nt = targets.length;
         teams = (function() {
@@ -182,16 +240,16 @@
         }
         for (j = 0, len = files.length; j < len; j++) {
           file = files[j];
-          if ((season === 2014 || season === 2015) && !file.name.endsWith('.zip')) {
+          if ((season === 2014 || season === 2015 || season === 2016 || season === 2017) && !file.name.endsWith('.zip')) {
             return onFailure(`${file.name} is not a zip file`);
-          } else if (season === 20150 && !file.name.endsWith('.csv')) {
+          } else if ((season === 20150 || season === 20160 || season === 20170) && !file.name.endsWith('.csv')) {
             return onFailure(`${file.name} is not a csv file`);
           }
         }
         // load files one after another
         fileIndex = 0;
         data = {};
-        loadFunc = season === 20150 ? loadFull : loadSingle;
+        loadFunc = season === 20150 || season === 20160 || season === 20170 ? loadFull : loadSingle;
         callback = function(name, fileData, error) {
           var t;
           if (error != null) {
@@ -234,6 +292,24 @@
       return results1;
     })();
 
+    FS_Data.regions_2016 = (function() {
+      var j, results1;
+      results1 = [];
+      for (i = j = 0; j <= 10; i = ++j) {
+        results1.push(i === 0 ? 'us' : `region${i}`);
+      }
+      return results1;
+    })();
+
+    FS_Data.regions_2017 = (function() {
+      var j, results1;
+      results1 = [];
+      for (i = j = 0; j <= 10; i = ++j) {
+        results1.push(i === 0 ? 'us' : `region${i}`);
+      }
+      return results1;
+    })();
+
     FS_Data.hhsRegions = (function() {
       var j, results1;
       results1 = [];
@@ -247,13 +323,25 @@
 
     FS_Data.targets_seasonal_2015 = ['onset', 'pkwk', 'pkper'];
 
+    FS_Data.targets_seasonal_2016 = ['onset', 'pkwk', 'pkper'];
+
+    FS_Data.targets_seasonal_2017 = ['onset', 'pkwk', 'pkper'];
+
     FS_Data.targets_local = ['1_week', '2_week', '3_week', '4_week'];
 
     FS_Data.targets_local_2015 = ['1wk', '2wk', '3wk', '4wk'];
 
+    FS_Data.targets_local_2016 = ['1wk', '2wk', '3wk', '4wk'];
+
+    FS_Data.targets_local_2017 = ['1wk', '2wk', '3wk', '4wk'];
+
     FS_Data.targets = FS_Data.targets_seasonal.concat(FS_Data.targets_local);
 
     FS_Data.targets_2015 = FS_Data.targets_seasonal_2015.concat(FS_Data.targets_local_2015);
+
+    FS_Data.targets_2016 = FS_Data.targets_seasonal_2016.concat(FS_Data.targets_local_2016);
+
+    FS_Data.targets_2017 = FS_Data.targets_seasonal_2017.concat(FS_Data.targets_local_2016);
 
     FS_Data.errors = ['LS', 'AE'];
 
