@@ -128,8 +128,7 @@
             }
             return results1;
           }).call(this);
-        }
-        if (season === 20160) {
+        } else if (season === 20160) {
           targets = (function() {
             var j, len, results1;
             results1 = [];
@@ -148,8 +147,7 @@
             }
             return results1;
           }).call(this);
-        }
-        if (season === 20170) {
+        } else if (season === 20170) {
           targets = (function() {
             var j, len, results1;
             results1 = [];
