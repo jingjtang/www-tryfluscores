@@ -29,12 +29,30 @@
             }
             return results1;
           })();
-        } else if (season === 20160) {
+        } else if (season === 2016 || season === 20160) {
           this.epiweeks = (function() {
             var j, results1;
             results1 = [];
             for (i = j = 3; j <= 30; i = ++j) {
               results1.push('' + (i <= 12 ? 201640 + i : 201700 + i - 12));
+            }
+            return results1;
+          })();
+        } else if (season === 2017 || season === 20170) {
+          this.epiweeks = (function() {
+            var j, results1;
+            results1 = [];
+            for (i = j = 2; j <= 30; i = ++j) {
+              results1.push('' + (i <= 12 ? 201740 + i : 201800 + i - 12));
+            }
+            return results1;
+          })();
+        } else if (season === 2018 || season === 20180) {
+          this.epiweeks = (function() {
+            var j, results1;
+            results1 = [];
+            for (i = j = 2; j <= 30; i = ++j) {
+              results1.push('' + (i <= 12 ? 201840 + i : 201900 + i - 12));
             }
             return results1;
           })();
@@ -100,7 +118,7 @@
           targets = [target];
         }
         regions = region === 'combine' ? this.regions : [region];
-        if (season === 20150 || season === 20160) {
+        if (season === 20150 || season === 20160 || season === 20170 || season === 20180) {
           targets = (function() {
             var j, len, results1;
             results1 = [];
@@ -191,16 +209,16 @@
         }
         for (j = 0, len = files.length; j < len; j++) {
           file = files[j];
-          if ((season === 2014 || season === 2015) && !file.name.endsWith('.zip')) {
+          if ((season === 2014 || season === 2015 || season === 2016 || season === 2017 || season === 2018) && !file.name.endsWith('.zip')) {
             return onFailure(`${file.name} is not a zip file`);
-          } else if ((season === 20150 || season === 20160) && !file.name.endsWith('.csv')) {
+          } else if ((season === 20150 || season === 20160 || season === 20170 || season === 20180) && !file.name.endsWith('.csv')) {
             return onFailure(`${file.name} is not a csv file`);
           }
         }
         // load files one after another
         fileIndex = 0;
         data = {};
-        loadFunc = season === 20150 || season === 20160 ? loadFull : loadSingle;
+        loadFunc = season === 20150 || season === 20160 || season === 20170 || season === 20180 ? loadFull : loadSingle;
         callback = function(name, fileData, error) {
           var t;
           if (error != null) {
@@ -266,7 +284,7 @@
 
     FS_Data.errors = ['LS', 'AE'];
 
-    FS_Data.error_labels = ['CDC log score 2016-2017', 'absolute error'];
+    FS_Data.error_labels = ['CDC log score', 'absolute error'];
 
     FS_Data.wILI = null;
 
