@@ -105,7 +105,7 @@
         return results1;
       }
 
-      static update(data, season, error, target, region, epiweek) {
+      static update(data, season, error, target, region, group) {
         var dst_row, j, k, len, len1, len2, len3, len4, m, nr, nt, o, p, r, ref, ref1, regions, row, src_row, t, targets, team, teams, totals, v, values, w;
         totals = null;
         if (target === 'combine') {

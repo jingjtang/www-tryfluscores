@@ -43,7 +43,7 @@
       <div>
         <p class="title" style="padding:24px;font-size:3em;">
           FluScores
-        </p>    
+        </p>
         <p style="border-bottom:1px solid #ccc;margin-bottom:12px;padding-bottom:12px;">
           Select zip files below. You can compare different teams by selecting multiple files.
           <br />
@@ -53,7 +53,8 @@
           Season: <select id="season_select">
             <option value="2014">2014-2015</option>
             <option value="2015">2015-2016 (zip file)</option>
-            <option value="20150">2015-2016 (csv file)
+            <option value="20150" selected> 2015-2016 (csv file)
+            <option value="2016">2016-2017 (zip file)</option>
             <option value="20160" selected> 2016-2017 (csv file)</option>
             <option value="2017">2017-2018 (zip file)</option>
             <option value="20170" selected="">2017-2018 (csv file)</option>
@@ -79,8 +80,8 @@
           <label>Error Type: <select id="select_error"></select></label>&nbsp;|&nbsp;
           <label>Target: <select id="select_target"></select></label>&nbsp;|&nbsp;
           <label>Region: <select id="select_region"></select></label>&nbsp;|&nbsp;
-          <label>Group: <select id="select_epiweek"> 
-            <option value="plot" selected>[by epiweek]</option> 
+          <label>Group: <select id="select_group">
+            <option value="plot" selected>[by epiweek]</option>
             <option value="combine">[by team]</option>
           </select></label>&nbsp;
         </div>
@@ -88,10 +89,10 @@
           <input id="button_shake" type="button" value="Shake It Up"></input>&nbsp;|&nbsp;
           <label>Show Points: <input id="checkbox_points" type="checkbox"></input></label>&nbsp;|&nbsp;
           <label>Overlay wILI: <input id="checkbox_wili" type="checkbox"></input></label>&nbsp;|&nbsp;
-          <label> Show Legend : <input id="checkbox_legend" type="checkbox" checked="checked"></input></label> 
+          <label> Show Legend : <input id="checkbox_legend" type="checkbox" checked="checked"></input></label>
         </div>
       </div>
-      
+
       <div id="container" style="height:calc(100% - 64px)">
         <input id="button_plotmenu" type="button"/>
         <div id="plot_menu" style="height:100%;width:150px;float:left;padding-top:30px;">
@@ -133,7 +134,7 @@
     var error = $('#select_error');
     var target = $('#select_target');
     var region = $('#select_region');
-    var epiweek = $('#select_epiweek');
+    var group = $('#select_group');
     var shakeButton = $('#button_shake');
     var pointsCheckbox = $('#checkbox_points');
     var wiliCheckbox = $('#checkbox_wili');
@@ -162,7 +163,7 @@
       if(data === null) {
         return;
       }
-      var values = FS_Data.update(data, parseInt($('#season_select').val()), error.val(), target.val(), region.val(), epiweek.val());
+      var values = FS_Data.update(data, parseInt($('#season_select').val()), error.val(), target.val(), region.val(), group.val());
       var plotData = {};
       var currTeams = [];
       var currColors = [];
@@ -176,8 +177,8 @@
           }
         }
       }
-      if(epiweek.val() == 'combine') {
-        plot.barMode();
+      if(group.val() == 'combine') {
+        plot.lineMode();
       } else {
         plot.lineMode();
       }
@@ -232,7 +233,7 @@
       error.change(function () { update('normal');});
       target.change(function () { update('normal');});
       region.change(function () { update('normal');});
-      epiweek.change(function () { update('normal');});
+      group.change(function () { update('normal');});
       wiliCheckbox.click(function () { update('normal');});
       zoominButton.click(function () { update('zoomIn');});
       zoomoutButton.click(function () { update('zoomOut');});
@@ -246,7 +247,7 @@
         FS_Data.addAllOptions(error, target, region);
         FS_Data.loadFiles($('#files')[0].files, parseInt($('#season_select').val()), onLoadSuccess, onLoadError);
       });
-      selectAllButton.click(function () { 
+      selectAllButton.click(function () {
         exclude_teams = [];
         var checkboxes = document.querySelectorAll('#legend input[type=checkbox]');
         for(var i = 0; i < checkboxes.length; i++) {
