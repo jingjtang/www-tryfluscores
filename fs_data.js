@@ -42,7 +42,7 @@
           this.epiweeks = (function() {
             var j, results1;
             results1 = [];
-            for (i = j = 3; j <= 30; i = ++j) {
+            for (i = j = 2; j <= 29; i = ++j) {
               results1.push('' + (i <= 12 ? 201740 + i : 201800 + i - 12));
             }
             return results1;
