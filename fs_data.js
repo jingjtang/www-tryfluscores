@@ -362,13 +362,13 @@
     };
 
     unpackValues = function(data, values, targets, season) {
-      var err, ew, j, len, results1, target;
+      var err, ew, j, k, len, len1, results1, results2, target;
       i = 0;
-      results1 = [];
-      for (j = 0, len = targets.length; j < len; j++) {
-        target = targets[j];
-        data[target] = {};
-        if (season === 20150 || season === 20160 || season === 20170) {
+      if (season === 20150 || season === 20160 || season === 20170) {
+        results1 = [];
+        for (j = 0, len = targets.length; j < len; j++) {
+          target = targets[j];
+          data[target] = {};
           results1.push((function() {
             var k, len1, ref, results2;
             ref = FS_Data.errors;
@@ -389,22 +389,26 @@
             }
             return results2;
           })());
-        } else if (season === 20180) {
-          results1.push((function() {
-            var k, len1, ref, results2;
-            ref = FS_Data.epiweeks;
-            results2 = [];
-            for (k = 0, len1 = ref.length; k < len1; k++) {
-              ew = ref[k];
-              results2.push(data[target][ew] = values[i++]);
-            }
-            return results2;
-          })());
-        } else {
-          results1.push(void 0);
         }
+        return results1;
+      } else if (season === 20180) {
+        results2 = [];
+        for (k = 0, len1 = targets.length; k < len1; k++) {
+          target = targets[k];
+          data[target] = {};
+          results2.push((function() {
+            var len2, m, ref, results3;
+            ref = FS_Data.epiweeks;
+            results3 = [];
+            for (m = 0, len2 = ref.length; m < len2; m++) {
+              ew = ref[m];
+              results3.push(data[target][ew] = values[i++]);
+            }
+            return results3;
+          })());
+        }
+        return results2;
       }
-      return results1;
     };
 
     getValues = function(filename, zip, region, target) {
@@ -473,7 +477,7 @@
                 })();
               }
               values = parseFullCSV(csv, region, target, results, season);
-              unpackValues(data[region], values, [target]);
+              unpackValues(data[region], values, [target], season);
             }
           }
         } catch (error1) {
@@ -506,20 +510,19 @@
           location = row[1];
           target = row[2];
           ls = row[7];
-        } else if (season === 20180) {
-          location = row[0];
-          target = row[1];
-          ls = row[2];
-          competitionweek = row[5];
-        }
-        if (location === l && target === t) {
-          if (season === 20150 || season === 20160 || season === 20170) {
+          if (location === l && target === t) {
             results.push(fix(parseFloat(ls)));
             if (row.length >= 9) {
               ae = row[8];
               AEresults.push(fix(parseFloat(ae)));
             }
-          } else if (season === 20180) {
+          }
+        } else if (season === 20180) {
+          location = row[0];
+          target = row[1];
+          ls = row[2];
+          competitionweek = row[5];
+          if (location.inclues(l) && target.includes(t)) {
             results[competitionweek - 1] = fix(parseFloat(ls));
           }
         }
