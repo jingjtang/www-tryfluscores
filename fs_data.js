@@ -12,6 +12,16 @@
           return;
         }
         if (season === 2014) {
+          this.regions = (function() {
+            var j, results1;
+            results1 = [];
+            for (i = j = 0; j <= 10; i = ++j) {
+              results1.push(i === 0 ? 'Nat' : `Reg${i}`);
+            }
+            return results1;
+          })();
+          this.targets_seasonal = ['onset', 'peakweek', 'peak'];
+          this.targets_local = ['1_week', '2_week', '3_week', '4_week'];
           this.epiweeks = (function() {
             var j, results1;
             results1 = [];
@@ -21,33 +31,55 @@
             return results1;
           })();
         } else if (season === 2015 || season === 20150 || season === 2016 || season === 20160 || season === 2017 || season === 20170) {
-          this.epiweeks = (function() {
+          this.regions = (function() {
             var j, results1;
             results1 = [];
-            for (i = j = 2; j <= 30; i = ++j) {
-              results1.push('' + (i <= 12 ? 201540 + i : 201600 + i - 12));
+            for (i = j = 0; j <= 10; i = ++j) {
+              results1.push(i === 0 ? 'us' : `region${i}`);
             }
             return results1;
           })();
-        } else if (season === 2016 || season === 20160) {
-          this.epiweeks = (function() {
-            var j, results1;
-            results1 = [];
-            for (i = j = 3; j <= 30; i = ++j) {
-              results1.push('' + (i <= 12 ? 201640 + i : 201700 + i - 12));
-            }
-            return results1;
-          })();
-        } else if (season === 2017 || season === 20170) {
-          this.epiweeks = (function() {
-            var j, results1;
-            results1 = [];
-            for (i = j = 2; j <= 29; i = ++j) {
-              results1.push('' + (i <= 12 ? 201740 + i : 201800 + i - 12));
-            }
-            return results1;
-          })();
+          this.targets_seasonal = ['onset', 'pkwk', 'pkper'];
+          this.targets_local = ['1wk', '2wk', '3wk', '4wk'];
+          if (season === 2015 || season === 20150) {
+            this.epiweeks = (function() {
+              var j, results1;
+              results1 = [];
+              for (i = j = 2; j <= 30; i = ++j) {
+                results1.push('' + (i <= 12 ? 201540 + i : 201600 + i - 12));
+              }
+              return results1;
+            })();
+          } else if (season === 2016 || season === 20160) {
+            this.epiweeks = (function() {
+              var j, results1;
+              results1 = [];
+              for (i = j = 3; j <= 30; i = ++j) {
+                results1.push('' + (i <= 12 ? 201640 + i : 201700 + i - 12));
+              }
+              return results1;
+            })();
+          } else if (season === 2017 || season === 20170) {
+            this.epiweeks = (function() {
+              var j, results1;
+              results1 = [];
+              for (i = j = 2; j <= 29; i = ++j) {
+                results1.push('' + (i <= 12 ? 201740 + i : 201800 + i - 12));
+              }
+              return results1;
+            })();
+          }
         } else if (season === 2018 || season === 20180) {
+          this.regions = (function() {
+            var j, results1;
+            results1 = [];
+            for (i = j = 0; j <= 10; i = ++j) {
+              results1.push(i === 0 ? "US National" : `HHS Region ${i}`);
+            }
+            return results1;
+          })();
+          this.targets_seasonal = ['Season onset', 'Season peak week', 'Season peak percentage'];
+          this.targets_local = ['1 wk ahead', '2 wk ahead', '3 wk ahead', '4 wk ahead'];
           this.epiweeks = (function() {
             var j, results1;
             results1 = [];
@@ -91,6 +123,7 @@
             }
           };
         };
+        this.targets = this.targets_seasonal.concat(this.targets_local);
         this.wILI = {
           combine: []
         };
@@ -245,41 +278,6 @@
 
     //@regions = ((if i == 0 then 'Nat' else "Reg#{i}") for i in [0..10])
     //@regions_2015 = ((if i == 0 then 'us' else "region#{i}") for i in [0..10])
-    if (season === 2014) {
-      FS_Data.regions = (function() {
-        var j, results1;
-        results1 = [];
-        for (i = j = 0; j <= 10; i = ++j) {
-          results1.push(i === 0 ? 'Nat' : `Reg${i}`);
-        }
-        return results1;
-      })();
-      FS_Data.targets_seasonal = ['onset', 'peakweek', 'peak'];
-      FS_Data.targets_local = ['1_week', '2_week', '3_week', '4_week'];
-    } else if (season === 2015 || season === 20150 || season === 2016 || season === 20160 || season === 2017 || season === 20170) {
-      FS_Data.regions = (function() {
-        var j, results1;
-        results1 = [];
-        for (i = j = 0; j <= 10; i = ++j) {
-          results1.push(i === 0 ? 'us' : `region${i}`);
-        }
-        return results1;
-      })();
-      FS_Data.targets_seasonal = ['onset', 'pkwk', 'pkper'];
-      FS_Data.targets_local = ['1wk', '2wk', '3wk', '4wk'];
-    } else if (season === 2018 || season === 20180) {
-      FS_Data.regions = (function() {
-        var j, results1;
-        results1 = [];
-        for (i = j = 0; j <= 10; i = ++j) {
-          results1.push(i === 0 ? "US National" : `HHS Region ${i}`);
-        }
-        return results1;
-      })();
-      FS_Data.targets_seasonal = ['Season onset', 'Season peak week', 'Season peak percentage'];
-      FS_Data.targets_local = ['1 wk ahead', '2 wk ahead', '3 wk ahead', '4 wk ahead'];
-    }
-
     FS_Data.hhsRegions = (function() {
       var j, results1;
       results1 = [];
@@ -293,8 +291,6 @@
     //@targets_seasonal_2015 = ['onset', 'pkwk', 'pkper']
     //@targets_local = ['1_week', '2_week', '3_week', '4_week']
     //@targets_local_2015 = ['1wk', '2wk', '3wk', '4wk']
-    FS_Data.targets = FS_Data.targets_seasonal.concat(FS_Data.targets_local);
-
     FS_Data.errors = ['LS', 'AE'];
 
     FS_Data.error_labels = ['CDC log score', 'absolute error'];
