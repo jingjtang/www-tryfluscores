@@ -219,14 +219,14 @@
         fileIndex = 0;
         data = {};
         loadFunc = season === 20150 || season === 20160 || season === 20170 || season === 20180 ? loadFull : loadSingle;
-        callback = function(name, fileData, error) {
+        callback = function(name, fileData, error, season) {
           var t;
           if (error != null) {
             return onFailure(error);
           }
           data[name] = fileData;
           if (fileIndex < files.length) {
-            return loadFunc(files[fileIndex++], callback);
+            return loadFunc(files[fileIndex++], callback, season);
           } else {
             return onSuccess((function() {
               var results1;
@@ -238,7 +238,7 @@
             })(), data);
           }
         };
-        return loadFunc(files[fileIndex++], callback);
+        return loadFunc(files[fileIndex++], callback, season);
       }
 
     };
@@ -338,7 +338,7 @@
       return results1;
     };
 
-    loadSingle = function(file, callback) {
+    loadSingle = function(file, callback, season) {
       var reader;
       reader = new FileReader();
       reader.onload = function(event) {
@@ -352,20 +352,20 @@
             region = ref[j];
             data[region] = {};
             values = getValues(file.name, zip, region, '');
-            unpackValues(data[region], values, FS_Data.targets_seasonal);
+            unpackValues(data[region], values, FS_Data.targets_seasonal, season);
             values = getValues(file.name, zip, region, '_4wk');
-            unpackValues(data[region], values, FS_Data.targets_local);
+            unpackValues(data[region], values, FS_Data.targets_local, season);
           }
         } catch (error1) {
           ex = error1;
           error = (ref1 = ex.message) != null ? ref1 : '' + ex;
         }
-        return callback(file.name, data, error);
+        return callback(file.name, data, error, season);
       };
       return reader.readAsArrayBuffer(file);
     };
 
-    unpackValues = function(data, values, targets) {
+    unpackValues = function(data, values, targets, season) {
       var err, ew, j, len, results1, target;
       i = 0;
       results1 = [];
@@ -448,11 +448,11 @@
       })();
     };
 
-    loadFull = function(file, callback) {
+    loadFull = function(file, callback, season) {
       var reader;
       reader = new FileReader();
       reader.onload = function(event) {
-        var csv, data, error, ex, j, k, len, len1, ref, ref1, ref2, region, target, values;
+        var csv, data, error, ex, j, k, len, len1, ref, ref1, ref2, region, results, target, values;
         data = {};
         error = null;
         csv = event.target.result;
@@ -464,7 +464,19 @@
             ref1 = FS_Data.targets;
             for (k = 0, len1 = ref1.length; k < len1; k++) {
               target = ref1[k];
-              values = parseFullCSV(csv, region, target);
+              if (season === 20150 || season === 20160 || season === 20170) {
+                results = [];
+              } else if (season === 20180) {
+                results = (function() {
+                  var m, ref2, results1;
+                  results1 = [];
+                  for (m = 0, ref2 = FS_Data.epiweeks.length; (0 <= ref2 ? m < ref2 : m > ref2); 0 <= ref2 ? m++ : m--) {
+                    results1.push(0);
+                  }
+                  return results1;
+                })();
+              }
+              values = parseFullCSV(csv, region, target, results, season);
               unpackValues(data[region], values, [target]);
             }
           }
@@ -472,13 +484,13 @@
           ex = error1;
           error = (ref2 = ex.message) != null ? ref2 : '' + ex;
         }
-        return callback(file.name, data, error);
+        return callback(file.name, data, error, season);
       };
       return reader.readAsText(file);
     };
 
-    parseFullCSV = function(csv, l, t) {
-      var AEresults, ae, competitionweek, fix, j, k, len, location, ls, ref, ref1, results, row, target;
+    parseFullCSV = function(csv, l, t, results, season) {
+      var AEresults, ae, competitionweek, fix, j, k, len, location, ls, ref, ref1, row, target;
       fix = function(n) {
         if (Number.isNaN(n)) {
           return -10;
@@ -486,7 +498,6 @@
           return n;
         }
       };
-      results = [];
       AEresults = [];
       ref = csv.split('\n').slice(1);
       for (j = 0, len = ref.length; j < len; j++) {
