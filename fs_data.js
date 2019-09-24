@@ -362,53 +362,34 @@
     };
 
     unpackValues = function(data, values, targets, season) {
-      var err, ew, j, k, len, len1, results1, results2, target;
+      var err, ew, j, len, results1, target;
       i = 0;
-      if (season === 20150 || season === 20160 || season === 20170) {
-        results1 = [];
-        for (j = 0, len = targets.length; j < len; j++) {
-          target = targets[j];
-          data[target] = {};
-          results1.push((function() {
-            var k, len1, ref, results2;
-            ref = FS_Data.errors;
-            results2 = [];
-            for (k = 0, len1 = ref.length; k < len1; k++) {
-              err = ref[k];
-              data[target][err] = {};
-              results2.push((function() {
-                var len2, m, ref1, results3;
-                ref1 = FS_Data.epiweeks;
-                results3 = [];
-                for (m = 0, len2 = ref1.length; m < len2; m++) {
-                  ew = ref1[m];
-                  results3.push(data[target][err][ew] = values[i++]);
-                }
-                return results3;
-              })());
-            }
-            return results2;
-          })());
-        }
-        return results1;
-      } else if (season === 20180) {
-        results2 = [];
-        for (k = 0, len1 = targets.length; k < len1; k++) {
-          target = targets[k];
-          data[target] = {};
-          results2.push((function() {
-            var len2, m, ref, results3;
-            ref = FS_Data.epiweeks;
-            results3 = [];
-            for (m = 0, len2 = ref.length; m < len2; m++) {
-              ew = ref[m];
-              results3.push(data[target][ew] = values[i++]);
-            }
-            return results3;
-          })());
-        }
-        return results2;
+      results1 = [];
+      for (j = 0, len = targets.length; j < len; j++) {
+        target = targets[j];
+        data[target] = {};
+        results1.push((function() {
+          var k, len1, ref, results2;
+          ref = FS_Data.errors;
+          results2 = [];
+          for (k = 0, len1 = ref.length; k < len1; k++) {
+            err = ref[k];
+            data[target][err] = {};
+            results2.push((function() {
+              var len2, m, ref1, results3;
+              ref1 = FS_Data.epiweeks;
+              results3 = [];
+              for (m = 0, len2 = ref1.length; m < len2; m++) {
+                ew = ref1[m];
+                results3.push(data[target][err][ew] = values[i++]);
+              }
+              return results3;
+            })());
+          }
+          return results2;
+        })());
       }
+      return results1;
     };
 
     getValues = function(filename, zip, region, target) {
@@ -464,18 +445,7 @@
             ref1 = FS_Data.targets;
             for (k = 0, len1 = ref1.length; k < len1; k++) {
               target = ref1[k];
-              if (season === 20150 || season === 20160 || season === 20170) {
-                results = [];
-              } else if (season === 20180) {
-                results = (function() {
-                  var m, ref2, results1;
-                  results1 = [];
-                  for (m = 0, ref2 = FS_Data.epiweeks.length; (0 <= ref2 ? m < ref2 : m > ref2); 0 <= ref2 ? m++ : m--) {
-                    results1.push(0);
-                  }
-                  return results1;
-                })();
-              }
+              results = [];
               values = parseFullCSV(csv, region, target, results, season);
               unpackValues(data[region], values, [target], season);
             }
@@ -523,10 +493,11 @@
           ls = row[2];
           competitionweek = row[5];
           if (location.includes(l) && target.includes(t)) {
-            results[competitionweek - 1] = fix(parseFloat(ls));
+            results.push(fix(parseFloat(ls)));
           }
         }
       }
+      //results[competitionweek-1] = fix(parseFloat(ls))
       // No AEresults for 2018
       if (AEresults.length === 0) {
 // pad the abs err scores with 0s. to change when AE scores are available
