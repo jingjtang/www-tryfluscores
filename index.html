@@ -61,6 +61,11 @@
             <option value="2018">2018-2019 (zip file)</option>
             <option value="20180" selected="">2018-2019 (csv file)</option>
           </select> |
+          Competition: <select id="comp_select">
+            <option value="National" select>National</option>
+            <option value="State" select>State</option>
+            <option value="Hospitalization" selected> Hospitalization</option>
+          </select> |
           <label>Files: <input id="files" type="file" multiple /></label> |
           <input id="button_load" type="submit" value="Analyze Files" />
           <br />
@@ -163,7 +168,7 @@
       if(data === null) {
         return;
       }
-      var values = FS_Data.update(data, parseInt($('#season_select').val()), error.val(), target.val(), region.val(), group.val());
+      var values = FS_Data.update(data, parseInt($('#season_select').val()), $('#comp_select').val()), error.val(), target.val(), region.val(), group.val());
       var plotData = {};
       var currTeams = [];
       var currColors = [];
@@ -243,7 +248,7 @@
       legendCheckbox.click(function () { update('legendToggle');});
       loadButton.click(function() {
         loadButton.prop('disabled', true);
-        FS_Data.init(parseInt($('#season_select').val()));
+        FS_Data.init(parseInt($('#season_select').val()), parseInt($('#comp_select').val()));
         FS_Data.addAllOptions(error, target, region);
         FS_Data.loadFiles($('#files')[0].files, parseInt($('#season_select').val()), onLoadSuccess, onLoadError);
       });
