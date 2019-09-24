@@ -6,7 +6,7 @@
     var addOptions, getValues, i, loadFull, loadSingle, parseCSV, parseFullCSV, transpose, unpackValues;
 
     class FS_Data {
-      static init(season, competition) {
+      static init(season) {
         var getCallback, hhs, j, len, name, ref, results1, weekRange;
         if (this.wILI !== null) {
           return;
@@ -138,7 +138,7 @@
         return results1;
       }
 
-      static update(data, season, competition, error, target, region, group) {
+      static update(data, season, error, target, region, group) {
         var dst_row, j, k, len, len1, len2, len3, len4, m, nr, nt, o, p, r, ref, ref1, regions, row, src_row, t, targets, team, teams, totals, v, values, w;
         totals = null;
         if (target === 'combine') {
@@ -348,9 +348,9 @@
             region = ref[j];
             data[region] = {};
             values = getValues(file.name, zip, region, '');
-            unpackValues(data[region], values, FS_Data.targets_seasonal, season);
+            unpackValues(data[region], values, FS_Data.targets_seasonal);
             values = getValues(file.name, zip, region, '_4wk');
-            unpackValues(data[region], values, FS_Data.targets_local, season);
+            unpackValues(data[region], values, FS_Data.targets_local);
           }
         } catch (error1) {
           ex = error1;
@@ -361,54 +361,35 @@
       return reader.readAsArrayBuffer(file);
     };
 
-    unpackValues = function(data, values, targets, season) {
-      var err, ew, j, k, len, len1, results1, results2, target;
+    unpackValues = function(data, values, targets) {
+      var err, ew, j, len, results1, target;
       i = 0;
-      if (season === 20150 || season === 20160 || season === 20170) {
-        results1 = [];
-        for (j = 0, len = targets.length; j < len; j++) {
-          target = targets[j];
-          data[target] = {};
-          results1.push((function() {
-            var k, len1, ref, results2;
-            ref = FS_Data.errors;
-            results2 = [];
-            for (k = 0, len1 = ref.length; k < len1; k++) {
-              err = ref[k];
-              data[target][err] = {};
-              results2.push((function() {
-                var len2, m, ref1, results3;
-                ref1 = FS_Data.epiweeks;
-                results3 = [];
-                for (m = 0, len2 = ref1.length; m < len2; m++) {
-                  ew = ref1[m];
-                  results3.push(data[target][err][ew] = values[i++]);
-                }
-                return results3;
-              })());
-            }
-            return results2;
-          })());
-        }
-        return results1;
-      } else if (season === 20180) {
-        results2 = [];
-        for (k = 0, len1 = targets.length; k < len1; k++) {
-          target = targets[k];
-          data[target] = {};
-          results2.push((function() {
-            var len2, m, ref, results3;
-            ref = FS_Data.epiweeks;
-            results3 = [];
-            for (m = 0, len2 = ref.length; m < len2; m++) {
-              ew = ref[m];
-              results3.push(data[target][ew] = values[i++]);
-            }
-            return results3;
-          })());
-        }
-        return results2;
+      results1 = [];
+      for (j = 0, len = targets.length; j < len; j++) {
+        target = targets[j];
+        data[target] = {};
+        results1.push((function() {
+          var k, len1, ref, results2;
+          ref = FS_Data.errors;
+          results2 = [];
+          for (k = 0, len1 = ref.length; k < len1; k++) {
+            err = ref[k];
+            data[target][err] = {};
+            results2.push((function() {
+              var len2, m, ref1, results3;
+              ref1 = FS_Data.epiweeks;
+              results3 = [];
+              for (m = 0, len2 = ref1.length; m < len2; m++) {
+                ew = ref1[m];
+                results3.push(data[target][err][ew] = values[i++]);
+              }
+              return results3;
+            })());
+          }
+          return results2;
+        })());
       }
+      return results1;
     };
 
     getValues = function(filename, zip, region, target) {
@@ -477,7 +458,7 @@
                 })();
               }
               values = parseFullCSV(csv, region, target, results, season);
-              unpackValues(data[region], values, [target], season);
+              unpackValues(data[region], values, [target]);
             }
           }
         } catch (error1) {
@@ -523,6 +504,7 @@
           ls = row[2];
           competitionweek = row[5];
           if (location.includes(l) && target.includes(t)) {
+            //results.push(fix(parseFloat(ls)))
             results[competitionweek - 1] = fix(parseFloat(ls));
           }
         }
