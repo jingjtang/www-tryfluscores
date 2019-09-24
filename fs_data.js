@@ -522,7 +522,7 @@
           target = row[1];
           ls = row[2];
           competitionweek = row[5];
-          if (location.inclues(l) && target.includes(t)) {
+          if (location.includes(l) && target.includes(t)) {
             results[competitionweek - 1] = fix(parseFloat(ls));
           }
         }
