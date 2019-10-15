@@ -312,7 +312,7 @@ class Bar
           bar.alpha = 1
         overlay.addChild(b)
     # legend placement
-    # @legend.position.set(plotBox.x + plotBox.w - @legend.width - 8, plotBox.y)
+    @legend.position.set(plotBox.x + plotBox.w - @legend.width - 8, plotBox.y)
     # put it all together
     stageMain = new PIXI.Container()
     #stageMain.addChild(x_label)

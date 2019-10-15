@@ -462,7 +462,7 @@
           }
         }
         // legend placement
-        // @legend.position.set(plotBox.x + plotBox.w - @legend.width - 8, plotBox.y)
+        this.legend.position.set(plotBox.x + plotBox.w - this.legend.width - 8, plotBox.y);
         // put it all together
         stageMain = new PIXI.Container();
         //stageMain.addChild(x_label)
