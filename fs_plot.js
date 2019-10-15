@@ -230,7 +230,7 @@
             fill: this.teamColors[team]
           };
           mesh = textMesh(team, style);
-          mesh.position.set(mesh.width / 2, 160 + 16 * (i + 1));
+          mesh.position.set(mesh.width / 2, 16 * (i + 1));
           this.legend.addChild(mesh);
         }
         // wILI overlay
@@ -462,7 +462,7 @@
           }
         }
         // legend placement
-        this.legend.position.set(plotBox.x + plotBox.w - this.legend.width - 8, plotBox.y);
+        // @legend.position.set(plotBox.x + plotBox.w - @legend.width - 8, plotBox.y)
         // put it all together
         stageMain = new PIXI.Container();
         //stageMain.addChild(x_label)
