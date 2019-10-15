@@ -1,3 +1,4 @@
+
 <!doctype html>
 <!-- hi :) -->
 <html>
@@ -34,10 +35,10 @@
     </style>
   </head>
   <body>
-    <div style="position:absolute;top:0;right:0;font-color:#444;font-size:0.6em;text-shadow: 0px 0px 10px #888;">
+    <div style="position:absolute;top:0;right:0;font-color:#444;font-size:0.8em;text-shadow: 0px 0px 10px #888;">
       <img style="width:128px;height:18px;" src="http://www.cmu.edu/common/standard-v4/images/wordmark.gif"></img>
       <br>
-      dfarrow0@gmail.com | <a target="_blank" href="changelog.txt">v4</a>
+      <img style="width:128px;height:24px;" src="https://raw.githubusercontent.com/cmu-delphi/www-main/master/site/images/delphi_static.png"></img>
     </div>
     <div id="part0" class="full centered">
       <div>
@@ -74,6 +75,13 @@
         <p style="border-bottom:1px solid #ccc;margin-bottom:12px;padding-bottom:12px;">
           Fluscores has been developed and tested under Chrome. Other browsers may or may not work for now.
         </p>
+        <p style="position:absolute;bottom:0;left:0;right:0;solid #ccc;margin-bottom:12px;padding-bottom:12px;font-size:0.5em">
+          2019 Revised by Jingjing Tang jtang2@andrew.cmu.edu
+          <br>
+          2017 Revised by Tanay Vakharia
+          <br>
+          2016 Develped by David Farrow
+        </p>
       </div>
     </div>
     <div id="part1" class="full">
@@ -84,7 +92,7 @@
         <div style="padding-bottom:4px;border-bottom:1px solid #888;">
           <label>Error Type: <select id="select_error"></select></label>&nbsp;|&nbsp;
           <label>Target: <select id="select_target"></select></label>&nbsp;|&nbsp;
-          <label>Region: <select id="select_region"></select></label>&nbsp;|&nbsp;
+          <label>Location: <select id="select_region"></select></label>&nbsp;|&nbsp;
           <label>Group: <select id="select_group">
             <option value="plot" selected>[by epiweek]</option>
             <option value="combine">[by team]</option>
@@ -139,6 +147,7 @@
     var error = $('#select_error');
     var target = $('#select_target');
     var region = $('#select_region');
+    var agegroup = $('#select_AgeGroup')
     var group = $('#select_group');
     var shakeButton = $('#button_shake');
     var pointsCheckbox = $('#checkbox_points');
@@ -163,12 +172,11 @@
     var selectAllButton = $('#select_all_button');
     var unselectAllButton = $('#unselect_all_button');
     var recolorButton = $('#recolor_button');
-
     function update(input) {
       if(data === null) {
         return;
       }
-      var values = FS_Data.update(data, parseInt($('#season_select').val()), $('#comp_select').val()), error.val(), target.val(), region.val(), group.val());
+      var values = FS_Data.update(data, parseInt($('#season_select').val()), error.val(), target.val(), region.val(), group.val());
       var plotData = {};
       var currTeams = [];
       var currColors = [];
@@ -182,6 +190,8 @@
           }
         }
       }
+
+
       if(group.val() == 'combine') {
         plot.barMode();
       } else {
@@ -248,7 +258,7 @@
       legendCheckbox.click(function () { update('legendToggle');});
       loadButton.click(function() {
         loadButton.prop('disabled', true);
-        FS_Data.init(parseInt($('#season_select').val()), $('#comp_select').val());
+        FS_Data.init(parseInt($('#season_select').val()), $("#comp_select").val());
         FS_Data.addAllOptions(error, target, region);
         FS_Data.loadFiles($('#files')[0].files, parseInt($('#season_select').val()), onLoadSuccess, onLoadError);
       });
